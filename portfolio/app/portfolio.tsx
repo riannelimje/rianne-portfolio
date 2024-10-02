@@ -71,7 +71,7 @@ export default function Portfolio() {
             style={{ y: y1 }}
             className="text-center z-10"
           >
-            <h2 className="text-5xl font-bold mb-4">Welcome to Rianne's World</h2>
+            <h2 className="text-5xl font-bold mb-4">Welcome to Rianne&apos;s World</h2>
             <p className="text-xl">Explore my digital universe</p>
           </motion.div>
           <motion.div 
@@ -92,16 +92,15 @@ export default function Portfolio() {
           >
             <h2 className="text-4xl font-bold mb-4 text-center">About Me</h2>
             <p className="text-lg mb-4">
-              I'm a penultimate Information Systems student from Singapore Management University, specialising in Financial Technology & Digitalisation and Cloud Solutions. 
+              I am a penultimate Information Systems student from Singapore Management University, specialising in Financial Technology & Digitalisation and Cloud Solutions. 
             </p>
 
             <p className="text-lg mb-4">
-            I am a passionate developer and an advocate for leveraging technology to drive meaningful social impacts.
-            With proficiency in Python, Java, JavaScript, CSS, HTML and SQL, I build dynamic solutions, particularly using frameworks like Vue.js. Currently, I'm expanding my skillset with Next.js while developing this website.
+            I am a passionate developer with proficiency in Python, Java, JavaScript, CSS, HTML and SQL, I build dynamic solutions, particularly using frameworks like Vue.js. Currently, I&apos;m expanding my skillset with Next.js while developing this website.
             </p>
 
             <p className="text-lg">
-              When I'm not coding, you can find me exploring new technologies, finding new investment opportunities, watching dramas or playing games.
+              When I&apos;m not coding, you can find me exploring new technologies, finding new investment opportunities, watching dramas or playing games.
             </p>
 
           </motion.div>
@@ -141,7 +140,7 @@ export default function Portfolio() {
             className="text-center"
           >
             <h2 className="text-4xl font-bold mb-4">Get In Touch</h2>
-            <p className="text-lg mb-8">I'm always open to new opportunities and collaborations.</p>
+            <p className="text-lg mb-8">I&apos;m always open to new opportunities and collaborations.</p>
             <div className="flex justify-center space-x-6">
               <a href="#" className="text-gray-800 hover:text-pink-600 transition-colors">
                 <GithubIcon size={32} />
