@@ -142,15 +142,15 @@ export default function Portfolio() {
             <h2 className="text-4xl font-bold mb-4">Get In Touch</h2>
             <p className="text-lg mb-8">I&apos;m always open to new opportunities and collaborations.</p>
             <div className="flex justify-center space-x-6">
-              <a href="#" className="text-gray-800 hover:text-pink-600 transition-colors">
+              <a href="https://github.com/riannelimje" className="text-gray-800 hover:text-pink-600 transition-colors">
                 <GithubIcon size={32} />
               </a>
-              <a href="#" className="text-gray-800 hover:text-pink-600 transition-colors">
+              <a href="https://www.linkedin.com/in/rianne-lim/" className="text-gray-800 hover:text-pink-600 transition-colors">
                 <LinkedinIcon size={32} />
               </a>
-              <a href="#" className="text-gray-800 hover:text-pink-600 transition-colors">
+              {/* <a href="#" className="text-gray-800 hover:text-pink-600 transition-colors">
                 <MailIcon size={32} />
-              </a>
+              </a> */}
             </div>
           </motion.div>
         </section>
