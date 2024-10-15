@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { GithubIcon, LinkedinIcon, MailIcon } from 'lucide-react'
+import { GithubIcon, LinkedinIcon } from 'lucide-react'
 
 export default function Portfolio() {
   const { scrollY } = useScroll()
@@ -148,9 +148,7 @@ export default function Portfolio() {
               <a href="https://www.linkedin.com/in/rianne-lim/" className="text-gray-800 hover:text-pink-600 transition-colors">
                 <LinkedinIcon size={32} />
               </a>
-              {/* <a href="#" className="text-gray-800 hover:text-pink-600 transition-colors">
-                <MailIcon size={32} />
-              </a> */}
+              
             </div>
           </motion.div>
         </section>
