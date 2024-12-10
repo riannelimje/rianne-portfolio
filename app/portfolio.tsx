@@ -30,6 +30,18 @@ export default function Portfolio() {
       description: 'Automating a quick prediction method from Chinese Metaphysics with the use of telegram bots.',
       technologies: ['Python', 'Telegram Bot API', 'Python Flask']
     },
+    {
+      id: 4, 
+      title: 'WFH SYSTEM', 
+      description: 'A comprehensive work from home management system to apply, approve and track employees WFH status.',
+      technologies: ['Python', 'Python Flask', 'Vue.js', 'Supabase', 'Vercel']
+    },
+    {
+      id: 5, 
+      title: 'OOP Project x P&C Maintenance Services', 
+      description: 'Worked with real world client to create a solution to manage worker jobs and admin schedule planning',
+      technologies: ['Java', 'Spring Boot', 'Vue.js', 'Google Maps API', 'Gmail API']
+    },
   ]
 
   useEffect(() => {
@@ -96,7 +108,7 @@ export default function Portfolio() {
             </p>
 
             <p className="text-lg mb-4">
-            I am a passionate developer with proficiency in Python, Java, JavaScript, CSS, HTML and SQL, I build dynamic solutions, particularly using frameworks like Vue.js. Currently, I&apos;m expanding my skillset with Next.js while developing this website.
+            A passionate developer with proficiency in Python, Java, JavaScript, CSS, HTML and SQL, I build dynamic solutions, particularly using frameworks like Vue.js. Currently, I&apos;m expanding my skillset with Next.js while developing this website.
             </p>
 
             <p className="text-lg">
