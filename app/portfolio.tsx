@@ -39,8 +39,14 @@ export default function Portfolio() {
     {
       id: 5, 
       title: 'OOP Project x P&C Maintenance Services', 
-      description: 'Worked with real world client to create a solution to manage worker jobs and admin schedule planning',
+      description: 'Worked with real world client to create a solution to manage worker jobs and admin schedule planning.',
       technologies: ['Java', 'Spring Boot', 'Vue.js', 'Google Maps API', 'Gmail API']
+    },
+    {
+      id: 6, 
+      title: 'Time The Market (FYP)', 
+      description: 'Developed a machine learning and sentiment analysis solution to predict stock market trends for Tiger Fund Management.',
+      technologies: ['Python','Python Flask','Tensorflow', 'LSTM', 'Vue.js', 'Docker', 'Vercel', 'AWS EC2', 'yfinance API', 'FRED API']
     },
   ]
 
