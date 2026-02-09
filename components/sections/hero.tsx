@@ -45,7 +45,6 @@ export function Hero({ className }: HeroProps) {
         {/* Dynamic Title */}
         <div className="space-y-2">
           <p className="text-terminal-dim text-sm">
-            {"// "}
             <span className="text-terminal-cyan">const</span>{" "}
             <span className="text-terminal-green">role</span> ={" "}
           </p>
@@ -71,7 +70,7 @@ export function Hero({ className }: HeroProps) {
             <span className="text-terminal-cyan">{">"}</span> Open to opportunities
           </span>
           <span className="text-muted-foreground">
-            <span className="text-terminal-yellow">{">"}</span> Vue.js / Python / Java
+            <span className="text-terminal-yellow">{">"}</span> Python / Java
           </span>
           <span className="text-terminal-dim">|</span>
           <a
@@ -97,7 +96,7 @@ export function Hero({ className }: HeroProps) {
         {/* Instruction */}
         <div className="pt-4">
           <p className="text-terminal-dim text-sm animate-pulse">
-            Type <span className="text-terminal-green">help</span> in the terminal below to get started...
+            Type <span className="text-terminal-green">help</span> in the terminal below or any linux command to get started...
           </p>
         </div>
       </div>

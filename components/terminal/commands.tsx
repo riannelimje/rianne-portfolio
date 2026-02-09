@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Github, Linkedin, ExternalLink } from "lucide-react";
+import { aboutData, skillsData, projectsData, contactsData } from "@/lib/portfolio-data";
 
 export function handleCommand(
   command: string,
@@ -95,49 +96,23 @@ function AboutOutput() {
     <div className="space-y-3 py-2">
       <p className="text-terminal-cyan">{"/* About Me */"}</p>
       <p className="leading-relaxed text-muted-foreground">
-        Hi! I&apos;m <span className="text-terminal-green">Rianne Lim</span>, a software engineer at JP Morgan Chase.
+        Hi! I&apos;m <span className="text-terminal-green">{aboutData.name}</span>!
       </p>
-      <p className="leading-relaxed text-muted-foreground">
-        A passionate developer with
-        proficiency in Python, Java, JavaScript, TypeScript and SQL.
-      </p>
-      <p className="leading-relaxed text-muted-foreground">
-        When I&apos;m not coding, you&apos;ll find me exploring new technologies,
-        finding investment opportunities, watching dramas, or playing games.
-      </p>
+      {aboutData.description.map((desc, index) => (
+        <p key={index} className="leading-relaxed text-muted-foreground">
+          {desc}
+        </p>
+      ))}
     </div>
   );
 }
 
 function SkillsOutput() {
-  const skillCategories = [
-    {
-      title: "Languages",
-      skills: ["Python", "Java", "JavaScript", "HTML", "CSS", "SQL"],
-      color: "text-terminal-green",
-    },
-    {
-      title: "Frontend",
-      skills: ["Vue.js", "Next.js"],
-      color: "text-terminal-cyan",
-    },
-    {
-      title: "Backend",
-      skills: ["Fast API", "Flask", "Spring Boot", "Supabase"],
-      color: "text-terminal-yellow",
-    },
-    {
-      title: "Tools",
-      skills: ["Docker", "Vercel", "AWS EC2", "Telegram API", "Google APIs"],
-      color: "text-terminal-red",
-    },
-  ];
-
   return (
     <div className="space-y-4 py-2">
       <p className="text-terminal-cyan">{"/* Technical Skills */"}</p>
       <div className="grid gap-3">
-        {skillCategories.map(({ title, skills, color }) => (
+        {skillsData.map(({ title, skills, color }) => (
           <div key={title} className="flex flex-col sm:flex-row sm:items-start gap-2">
             <span className={`${color} w-24 shrink-0`}>{title}:</span>
             <div className="flex flex-wrap gap-2">
@@ -158,50 +133,11 @@ function SkillsOutput() {
 }
 
 function ProjectsOutput() {
-  const projects = [
-    {
-      name: "Time The Market (FYP)",
-      desc: "ML & sentiment analysis solution to predict stock market trends for Tiger Fund Management",
-      tech: ["Python", "TensorFlow", "LSTM", "Vue.js", "Docker", "AWS EC2"],
-      link: "#",
-    },
-    {
-      name: "WFH System",
-      desc: "Comprehensive work from home management system to apply, approve and track WFH status",
-      tech: ["Python Flask", "Vue.js", "Supabase", "Vercel"],
-      link: "#",
-    },
-    {
-      name: "OOP Project x P&C Maintenance",
-      desc: "Real-world client solution to manage worker jobs and admin schedule planning",
-      tech: ["Java", "Spring Boot", "Vue.js", "Google Maps API"],
-      link: "#",
-    },
-    {
-      name: "Gym Daddy",
-      desc: "Gym management system with virtual queuing, booking, and Telegram notifications",
-      tech: ["Vue.js", "Python", "Docker", "Telegram API"],
-      link: "#",
-    },
-    {
-      name: "Solo Scholar",
-      desc: "Study platform with pomodoro timer, to-do lists, notes, and speech-to-text",
-      tech: ["JavaScript", "Vue.js", "HTML", "CSS"],
-      link: "#",
-    },
-    {
-      name: "Xiao Liu Ren Bot",
-      desc: "Telegram bot automating Chinese Metaphysics quick prediction methods",
-      tech: ["Python", "Telegram Bot API", "Flask"],
-      link: "#",
-    },
-  ];
-
   return (
     <div className="space-y-4 py-2">
       <p className="text-terminal-cyan">{"/* Featured Projects */"}</p>
       <div className="grid gap-4">
-        {projects.map((project) => (
+        {projectsData.map((project) => (
           <div
             key={project.name}
             className="border border-border rounded p-3 hover:border-terminal-green/50 transition-colors"
@@ -234,20 +170,10 @@ function ProjectsOutput() {
 }
 
 function ContactOutput() {
-  const contacts = [
-    {
-      icon: <Github className="w-4 h-4" />,
-      label: "GitHub",
-      value: "github.com/riannelimje",
-      href: "https://github.com/riannelimje",
-    },
-    {
-      icon: <Linkedin className="w-4 h-4" />,
-      label: "LinkedIn",
-      value: "linkedin.com/in/rianne-lim/",
-      href: "https://www.linkedin.com/in/rianne-lim/",
-    },
-  ];
+  const contacts = contactsData.map((contact) => ({
+    ...contact,
+    icon: contact.label === "GitHub" ? <Github className="w-4 h-4" /> : <Linkedin className="w-4 h-4" />,
+  }));
 
   return (
     <div className="space-y-3 py-2">
@@ -314,19 +240,19 @@ function NeofetchOutput() {
         <p className="text-terminal-dim">-------------------</p>
         <p>
           <span className="text-terminal-green">Name:</span>{" "}
-          <span className="text-foreground">Rianne Lim</span>
+          <span className="text-foreground">{aboutData.name}</span>
         </p>
         <p>
           <span className="text-terminal-green">Role:</span>{" "}
-          <span className="text-foreground">SWE</span>
+          <span className="text-foreground">{aboutData.role}</span>
         </p>
         <p>
           <span className="text-terminal-green">Location:</span>{" "}
-          <span className="text-foreground">Singapore</span>
+          <span className="text-foreground">{aboutData.location}</span>
         </p>
         <p>
           <span className="text-terminal-green">Message:</span>{" "}
-          <span className="text-foreground">Thanks for playing around with my website!</span>
+          <span className="text-foreground">{aboutData.message}</span>
         </p>
       </div>
     </div>
