@@ -43,40 +43,70 @@ export const skillsData = [
 
 export const projectsData = [
   {
+    name: "The Devil's Plan",
+    desc: "Recreating the games from The Devil's Plan!",
+    tech: ["Next.js", "Supabase"],
+    link: "#https://the-devils-plan.vercel.app/",
+  },
+  {
+    name: "Can You Pi?",
+    desc: "A game to test your knowledge on the digits of Pi",
+    tech: ["Python", "Fast API", "Next.js", "Docker"],
+    link: "#",
+  },
+  {
+    name: "CNY Motion Detector",
+    desc: "Made for Chinese New Year - clench and open your fist to evoke fireworks and a lucky scroll!",
+    tech: ["Three.js", "MediaPipe Hands", "WebGL", "Canvas API"],
+    link: "#https://cny-motion-detector.vercel.app/",
+  },
+  {
+    name: "AI Portfolio and Recruitment Assistant",
+    desc: "Comprehensive recruitment platform leveraging LLMs to reinvent how we apply as students and hire as recruiters",
+    tech: ["Python", "FastAPI", "LLM", "RAG", "Supabase", "Ollama", "Next.js"],
+    link: "#",
+  },
+  {
+    name: "A+ Alchemy / pinecone playground",
+    desc: "Started out as a pinecone playground but evolved into a study assistant that helps you summarise and quiz yourself on your notes!",
+    tech: ["Python", "FastAPI", "Next.js", "Pinecone", "SQLite"],
+    link: "#https://github.com/riannelimje/pinecone_playground",
+  },
+  {
     name: "Time The Market (FYP)",
     desc: "ML & sentiment analysis solution to predict stock market trends for Tiger Fund Management",
     tech: ["Python", "TensorFlow", "LSTM", "Vue.js", "Docker", "AWS EC2"],
-    link: "#",
+    link: "#https://github.com/riannelimje",
   },
   {
     name: "WFH System",
     desc: "Comprehensive work from home management system to apply, approve and track WFH status",
     tech: ["Python Flask", "Vue.js", "Supabase", "Vercel"],
-    link: "#",
+    link: "#https://github.com/riannelimje/SCRUM",
   },
   {
     name: "OOP Project x P&C Maintenance",
     desc: "Real-world client solution to manage worker jobs and admin schedule planning",
     tech: ["Java", "Spring Boot", "Vue.js", "Google Maps API"],
-    link: "#",
+    link: "#https://github.com/riannelimje",
   },
   {
     name: "Gym Daddy",
     desc: "Gym management system with virtual queuing, booking, and Telegram notifications",
     tech: ["Vue.js", "Python", "Docker", "Telegram API"],
-    link: "#",
+    link: "#https://github.com/riannelimje/gym-daddy-app",
   },
   {
     name: "Solo Scholar",
     desc: "Study platform with pomodoro timer, to-do lists, notes, and speech-to-text",
     tech: ["JavaScript", "Vue.js", "HTML", "CSS"],
-    link: "#",
+    link: "#https://github.com/riannelimje/study-with-me",
   },
   {
     name: "Xiao Liu Ren Bot",
     desc: "Telegram bot automating Chinese Metaphysics quick prediction methods",
-    tech: ["Python", "Telegram Bot API", "Flask"],
-    link: "#",
+    tech: ["Python", "Telegram Bot API", "Flask", "LLM", "AWS"],
+    link: "#t.me/xiaoliurenbot",
   },
 ];
 
