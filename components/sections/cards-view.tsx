@@ -77,34 +77,50 @@ export function CardsView() {
             <span className="text-terminal-dim">{"//"}</span> Projects
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {projectsData.map((project) => (
-              <Card
-                key={project.name}
-                className="bg-card border-border hover:border-terminal-green/50 transition-colors group cursor-pointer"
-              >
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-terminal-green text-lg flex items-center gap-2">
-                    {project.name}
-                    <ExternalLink className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    {project.desc}
-                  </p>
-                  <div className="flex flex-wrap gap-1">
-                    {project.tech.map((t) => (
-                      <span
-                        key={t}
-                        className="text-xs px-2 py-0.5 bg-secondary rounded text-terminal-cyan"
-                      >
-                        {t}
-                      </span>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+            {projectsData.map((project) => {
+              const CardWrapper = project.link ? 'a' : 'div';
+              const linkProps = project.link ? {
+                href: project.link,
+                target: "_blank",
+                rel: "noopener noreferrer"
+              } : {};
+              
+              return (
+                <CardWrapper
+                  key={project.name}
+                  {...linkProps}
+                  className={project.link ? "block no-underline" : ""}
+                >
+                  <Card
+                    className="bg-card border-border hover:border-terminal-green/50 transition-colors group cursor-pointer h-full"
+                  >
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-terminal-green text-lg flex items-center gap-2">
+                        {project.name}
+                        {project.link && (
+                          <ExternalLink className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+                        )}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <p className="text-sm text-muted-foreground leading-relaxed">
+                        {project.desc}
+                      </p>
+                      <div className="flex flex-wrap gap-1">
+                        {project.tech.map((t) => (
+                          <span
+                            key={t}
+                            className="text-xs px-2 py-0.5 bg-secondary rounded text-terminal-cyan"
+                          >
+                            {t}
+                          </span>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </CardWrapper>
+              );
+            })}
           </div>
         </section>
 

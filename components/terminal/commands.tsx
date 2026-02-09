@@ -137,30 +137,44 @@ function ProjectsOutput() {
     <div className="space-y-4 py-2">
       <p className="text-terminal-cyan">{"/* Featured Projects */"}</p>
       <div className="grid gap-4">
-        {projectsData.map((project) => (
-          <div
-            key={project.name}
-            className="border border-border rounded p-3 hover:border-terminal-green/50 transition-colors"
-          >
-            <div className="flex items-center gap-2 mb-1">
-              <span className="text-terminal-green font-semibold">
-                {project.name}
-              </span>
-              <ExternalLink className="w-3 h-3 text-muted-foreground" />
-            </div>
-            <p className="text-sm text-muted-foreground mb-2">{project.desc}</p>
-            <div className="flex flex-wrap gap-1">
-              {project.tech.map((t) => (
-                <span
-                  key={t}
-                  className="text-xs px-1.5 py-0.5 bg-secondary rounded text-terminal-cyan"
-                >
-                  {t}
+        {projectsData.map((project) => {
+          const ProjectWrapper = project.link ? 'a' : 'div';
+          const linkProps = project.link ? {
+            href: project.link,
+            target: "_blank",
+            rel: "noopener noreferrer",
+            className: "block border border-border rounded p-3 hover:border-terminal-green/50 transition-colors no-underline cursor-pointer"
+          } : {
+            className: "border border-border rounded p-3"
+          };
+          
+          return (
+            <ProjectWrapper
+              key={project.name}
+              {...linkProps}
+            >
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-terminal-green font-semibold">
+                  {project.name}
                 </span>
-              ))}
-            </div>
-          </div>
-        ))}
+                {project.link && (
+                  <ExternalLink className="w-3 h-3 text-muted-foreground" />
+                )}
+              </div>
+              <p className="text-sm text-muted-foreground mb-2">{project.desc}</p>
+              <div className="flex flex-wrap gap-1">
+                {project.tech.map((t) => (
+                  <span
+                    key={t}
+                    className="text-xs px-1.5 py-0.5 bg-secondary rounded text-terminal-cyan"
+                  >
+                    {t}
+                  </span>
+                ))}
+              </div>
+            </ProjectWrapper>
+          );
+        })}
       </div>
       <p className="text-terminal-dim text-sm">
         View more on GitHub →

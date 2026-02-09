@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Terminal as TerminalIcon, LayoutGrid } from "lucide-react";
 import { Terminal } from "@/components/terminal/terminal";
 import { handleCommand } from "@/components/terminal/commands";
@@ -144,6 +144,12 @@ export default function Home() {
 }
 
 function WelcomeMessage() {
+  const [currentDate, setCurrentDate] = useState("");
+
+  useEffect(() => {
+    setCurrentDate(new Date().toLocaleDateString());
+  }, []);
+
   return (
     <div className="space-y-2">
       <p className="text-terminal-cyan">
@@ -154,7 +160,7 @@ function WelcomeMessage() {
         commands.
       </p>
       <p className="text-terminal-dim text-sm">
-        Last login: {new Date().toLocaleDateString()} from 127.0.0.1
+        Last login: {currentDate || "..."} from 127.0.0.1
       </p>
     </div>
   );
