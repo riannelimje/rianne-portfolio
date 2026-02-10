@@ -451,7 +451,7 @@ export function CardsView() {
                       >
                         {/* Card Front */}
                         <Card
-                          className="w-[280px] h-[360px] bg-gradient-to-br from-card via-card to-secondary border-2 border-terminal-green/40 hover:border-terminal-green transition-all cursor-pointer"
+                          className="w-[280px] h-[360px] bg-gradient-to-br from-card via-card to-secondary border-2 border-terminal-green/40 hover:border-terminal-green transition-all cursor-pointer overflow-hidden"
                           style={{
                             backfaceVisibility: 'hidden',
                             boxShadow: isActive 
@@ -469,12 +469,12 @@ export function CardsView() {
                               )}
                             </CardTitle>
                           </CardHeader>
-                          <CardContent className="pt-4 space-y-3 h-[280px] flex flex-col">
-                            <p className="text-sm text-muted-foreground leading-relaxed flex-grow overflow-hidden line-clamp-3">
+                          <CardContent className="pt-4 space-y-3 h-[280px] flex flex-col overflow-hidden">
+                            <p className="text-sm text-muted-foreground leading-relaxed flex-grow overflow-hidden line-clamp-4">
                               {project.desc}
                             </p>
-                            <div className="flex flex-wrap gap-1.5 mt-auto overflow-hidden">
-                              {project.tech.slice(0, 4).map((t) => (
+                            <div className="flex flex-wrap gap-1.5 mt-auto max-h-[60px] overflow-hidden">
+                              {project.tech.slice(0, 3).map((t) => (
                                 <span
                                   key={t}
                                   className="text-xs px-2 py-1 bg-terminal-green/10 border border-terminal-green/40 rounded text-terminal-cyan whitespace-nowrap"
@@ -482,9 +482,9 @@ export function CardsView() {
                                   {t}
                                 </span>
                               ))}
-                              {project.tech.length > 4 && (
+                              {project.tech.length > 3 && (
                                 <span className="text-xs px-2 py-1 bg-terminal-green/10 border border-terminal-green/40 rounded text-terminal-dim whitespace-nowrap">
-                                  +{project.tech.length - 4}
+                                  +{project.tech.length - 3}
                                 </span>
                               )}
                             </div>
