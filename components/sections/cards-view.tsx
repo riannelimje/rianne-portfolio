@@ -116,7 +116,7 @@ export function CardsView() {
             <span className="text-terminal-dim">{"//"}</span> Projects
           </h2>
           <div className="overflow-x-auto pb-8 px-4">
-            <div className="relative flex items-center justify-center min-w-max py-12 h-[450px]" style={{ perspective: '2000px' }}>
+            <div className="relative flex items-center justify-center min-w-max pt-20 pb-12 h-[500px]" style={{ perspective: '2000px' }}>
               {[...projectsData].reverse().map((project, reverseIndex) => {
                 const index = projectsData.length - 1 - reverseIndex;
                 const isFlipped = flippedCards[index];
@@ -180,7 +180,7 @@ export function CardsView() {
                           <CardTitle 
                             className="text-terminal-green text-lg font-bold flex items-center justify-between gap-2"
                           >
-                            <span className="truncate">{project.name}</span>
+                            <span className="line-clamp-2">{project.name}</span>
                             {project.link && (
                               <ExternalLink className="w-4 h-4 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
                             )}
