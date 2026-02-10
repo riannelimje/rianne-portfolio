@@ -80,7 +80,7 @@ export function Terminal({
     } else if (e.key === "Tab") {
       e.preventDefault();
       // Simple tab completion
-      const commands = ["help", "about", "skills", "projects", "experience", "contact", "clear", "neofetch"];
+      const commands = ["help", "about", "skills", "projects", "experience", "contact", "clear", "neofetch", "market"];
       const matches = commands.filter((cmd) => cmd.startsWith(input.toLowerCase()));
       if (matches.length === 1) {
         setInput(matches[0]);
@@ -148,7 +148,6 @@ export function Terminal({
                 spellCheck={false}
                 aria-label="Terminal input"
               />
-              <span className="animate-pulse text-terminal-green">▋</span>
             </div>
           </div>
         </div>

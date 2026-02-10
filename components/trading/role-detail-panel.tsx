@@ -133,7 +133,7 @@ export function RoleDetailPanel({
         <div className="mt-12 pt-8 border-t border-border">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-muted-foreground text-center sm:text-left">
-              Want to see more? Add more shares to your portfolio.
+              Add more shares to your portfolio
             </p>
             <div className="flex items-center gap-3">
               <Button
