@@ -3,7 +3,6 @@ export interface Role {
   timeline: string;
   oneLiner: string;
   tags: string[];
-  gain: string; // Fake % gain for the trading metaphor
 }
 
 export interface Stock {
@@ -57,14 +56,12 @@ export const JPM_STOCK: Stock = {
       timeline: "March 2026 - Present",
       oneLiner: "to be unlocked...",
       tags: [""],
-      gain: "+18.3%",
     },
     {
       title: "Software Engineer Intern",
       timeline: "June 2025 - Aug 2025",
       oneLiner: "played with LLMs and RAG to translate natural language to SQL queries",
       tags: ["Python", "AWS Snowflake", "SQL"],
-      gain: "+24.7%",
     },
     
   ],

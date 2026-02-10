@@ -36,7 +36,7 @@ export const skillsData = [
   },
   {
     title: "Tools",
-    skills: ["Docker", "Vercel", "AWS EC2", "Telegram API", "Google APIs"],
+    skills: ["Docker", "Vercel", "AWS EC2", "Telegram API", "Google APIs", "Ollama"],
     color: "text-terminal-red",
   },
 ];

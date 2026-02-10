@@ -20,6 +20,7 @@ export function Hero({ className }: HeroProps) {
     "Matcha Lover",
     "Cardistry Enthusiast",
     "Drama Addict",
+    "Avid Photographer",
   ];
 
   useEffect(() => {
@@ -68,9 +69,6 @@ export function Hero({ className }: HeroProps) {
           </span>
           <span className="text-muted-foreground">
             <span className="text-terminal-cyan">{">"}</span> Open to opportunities
-          </span>
-          <span className="text-muted-foreground">
-            <span className="text-terminal-yellow">{">"}</span> Python / Java
           </span>
           <span className="text-terminal-dim">|</span>
           <a

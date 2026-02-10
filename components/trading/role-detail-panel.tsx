@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, Briefcase, Calendar, Award } from "lucide-react";
+import { ArrowLeft, Briefcase, Calendar } from "lucide-react";
 import { Stock, Portfolio } from "./types";
 import { Button } from "@/components/ui/button";
 
@@ -96,12 +96,6 @@ export function RoleDetailPanel({
                       <Calendar className="w-4 h-4" />
                       <span>{role.timeline}</span>
                     </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Award className="w-4 h-4 text-terminal-green" />
-                    <span className="text-terminal-green font-semibold bg-terminal-green/10 px-3 py-1 rounded-full text-sm">
-                      {role.gain}
-                    </span>
                   </div>
                 </div>
 
