@@ -12,12 +12,12 @@ export default function CardsPage() {
       {/* Header */}
       <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-40">
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-3">
+          <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
             <SmallLogo className="text-2xl" />
             <span className="text-muted-foreground text-sm hidden sm:inline">
               rianne.dev
             </span>
-          </div>
+          </Link>
           <nav className="flex items-center gap-4 text-sm">
             <div className="flex items-center gap-1 bg-secondary rounded-md p-1">
               <Link
