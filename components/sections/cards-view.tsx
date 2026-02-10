@@ -12,8 +12,17 @@ const contacts = contactsData.map((contact) => ({
 
 export function CardsView() {
   const [flippedCards, setFlippedCards] = useState<boolean[]>(new Array(projectsData.length).fill(false));
+  const [randomRotations, setRandomRotations] = useState<number[]>([]);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [touchStart, setTouchStart] = useState(0);
+  const [touchEnd, setTouchEnd] = useState(0);
   const sectionRef = useRef<HTMLDivElement>(null);
   const hasAnimated = useRef(false);
+
+  // Initialize random rotations on client side only to avoid hydration mismatch
+  useEffect(() => {
+    setRandomRotations(projectsData.map(() => (Math.random() - 0.5) * 3)); // -1.5 to 1.5 degrees
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -29,7 +38,7 @@ export function CardsView() {
                   newFlipped[index] = true;
                   return newFlipped;
                 });
-              }, index * 150); // 150ms delay between each card
+              }, index * 120); // 120ms delay between each card
             });
           }
         });
@@ -44,10 +53,46 @@ export function CardsView() {
     return () => observer.disconnect();
   }, []);
 
-  // Generate subtle random rotations for each card
-  const randomRotations = useRef(
-    projectsData.map(() => (Math.random() - 0.5) * 3) // -1.5 to 1.5 degrees
-  );
+  // Keyboard navigation for mobile fan
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft' && activeIndex > 0) {
+        setActiveIndex(prev => prev - 1);
+      } else if (e.key === 'ArrowRight' && activeIndex < projectsData.length - 1) {
+        setActiveIndex(prev => prev + 1);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [activeIndex]);
+
+  // Swipe handlers for mobile
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+
+    if (isLeftSwipe && activeIndex < projectsData.length - 1) {
+      setActiveIndex(prev => prev + 1);
+    }
+    if (isRightSwipe && activeIndex > 0) {
+      setActiveIndex(prev => prev - 1);
+    }
+
+    setTouchStart(0);
+    setTouchEnd(0);
+  };
 
   return (
     <div className="min-h-screen bg-background p-4 md:p-8">
@@ -115,13 +160,14 @@ export function CardsView() {
           <h2 className="text-2xl font-bold text-terminal-cyan flex items-center gap-2">
             <span className="text-terminal-dim">{"//"}</span> Projects
           </h2>
-          <div className="overflow-x-auto pb-8 px-4">
+          {/* Desktop: Horizontal fan-out */}
+          <div className="hidden md:block overflow-x-auto pb-8 px-4">
             <div className="relative flex items-center justify-center min-w-max pt-20 pb-12 h-[500px]" style={{ perspective: '2000px' }}>
               {[...projectsData].reverse().map((project, reverseIndex) => {
                 const index = projectsData.length - 1 - reverseIndex;
                 const isFlipped = flippedCards[index];
                 const translateX = reverseIndex * 65; // Optimized spacing to fit all cards on desktop
-                const rotation = randomRotations.current[index];
+                const rotation = randomRotations[index] || 0;
                 const zIndex = reverseIndex;
                 
                 const CardWrapper = project.link ? 'a' : 'div';
@@ -268,8 +314,186 @@ export function CardsView() {
               })}
             </div>
           </div>
-          <p className="text-center text-terminal-dim text-sm animate-pulse">
-            {flippedCards.every(f => f) ? 'Hover over the cards to explore projects' : 'Watch the cards flip...'}
+
+          {/* Mobile: Waterfall cascade */}
+          <div className="md:hidden relative flex flex-col items-center py-8" style={{ perspective: '1500px' }}>
+            {/* Swipeable card fan */}
+            <div 
+              className="relative w-full h-[420px] flex items-center justify-center"
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
+              style={{ perspective: '1200px' }}
+            >
+              {projectsData.map((project, index) => {
+                const isFlipped = flippedCards[index];
+                const isActive = index === activeIndex;
+                const offset = index - activeIndex;
+                
+                // Fan out effect: cards spread horizontally and rotate based on position
+                const translateX = offset * 15; // Horizontal spread
+                const translateZ = isActive ? 0 : Math.abs(offset) * -30; // Depth
+                const rotateY = offset * 8; // Fan rotation
+                const scale = isActive ? 1 : 0.85 - Math.abs(offset) * 0.05;
+                const opacity = Math.max(0.3, 1 - Math.abs(offset) * 0.15);
+                const zIndex = projectsData.length - Math.abs(offset);
+                
+                const CardWrapper = project.link ? 'a' : 'div';
+                const linkProps = project.link ? {
+                  href: project.link,
+                  target: "_blank",
+                  rel: "noopener noreferrer"
+                } : {};
+                
+                return (
+                  <div
+                    key={project.name}
+                    className="absolute transition-all duration-500 ease-out"
+                    style={{
+                      transform: `translateX(${translateX}px) translateZ(${translateZ}px) rotateY(${rotateY}deg) scale(${scale})`,
+                      opacity: opacity,
+                      zIndex: zIndex,
+                      pointerEvents: isActive ? 'auto' : 'none',
+                    }}
+                    onClick={() => setActiveIndex(index)}
+                  >
+                    <CardWrapper
+                      {...linkProps}
+                      className="block no-underline"
+                      style={{ pointerEvents: isFlipped ? 'auto' : 'none' }}
+                    >
+                      <div
+                        style={{
+                          transformStyle: 'preserve-3d',
+                          transition: 'transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                          transform: isFlipped ? 'rotateY(0deg)' : 'rotateY(180deg)',
+                          width: '280px',
+                          height: '360px',
+                        }}
+                      >
+                        {/* Card Front */}
+                        <Card
+                          className="w-[280px] h-[360px] bg-gradient-to-br from-card via-card to-secondary border-2 border-terminal-green/40 hover:border-terminal-green transition-all cursor-pointer"
+                          style={{
+                            backfaceVisibility: 'hidden',
+                            boxShadow: isActive 
+                              ? '0 25px 70px rgba(0, 0, 0, 0.6), 0 0 25px rgba(0, 255, 159, 0.15)' 
+                              : '0 15px 40px rgba(0, 0, 0, 0.4), 0 0 15px rgba(0, 255, 159, 0.08)',
+                          }}
+                        >
+                          <CardHeader className="pb-3 border-b border-terminal-green/30">
+                            <CardTitle 
+                              className="text-terminal-green text-lg font-bold flex items-center justify-between gap-2"
+                            >
+                              <span className="line-clamp-2">{project.name}</span>
+                              {project.link && (
+                                <ExternalLink className="w-4 h-4 flex-shrink-0" />
+                              )}
+                            </CardTitle>
+                          </CardHeader>
+                          <CardContent className="pt-4 space-y-3 h-[280px] flex flex-col">
+                            <p className="text-sm text-muted-foreground leading-relaxed flex-grow overflow-hidden">
+                              {project.desc}
+                            </p>
+                            <div className="flex flex-wrap gap-1.5 mt-auto">
+                              {project.tech.slice(0, 3).map((t) => (
+                                <span
+                                  key={t}
+                                  className="text-xs px-2.5 py-1 bg-terminal-green/10 border border-terminal-green/40 rounded text-terminal-cyan"
+                                >
+                                  {t}
+                                </span>
+                              ))}
+                              {project.tech.length > 3 && (
+                                <span className="text-xs px-2.5 py-1 bg-terminal-green/10 border border-terminal-green/40 rounded text-terminal-dim">
+                                  +{project.tech.length - 3}
+                                </span>
+                              )}
+                            </div>
+                          </CardContent>
+                        </Card>
+
+                        {/* Card Back */}
+                        <Card
+                          className="w-[280px] h-[360px] absolute top-0 left-0 bg-gradient-to-br from-terminal-green/5 via-secondary to-terminal-cyan/5 border-2 border-terminal-green/40"
+                          style={{
+                            backfaceVisibility: 'hidden',
+                            transform: `rotateY(180deg)`,
+                            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 255, 159, 0.1)',
+                          }}
+                        >
+                          <div className="w-full h-full flex flex-col items-center justify-center p-6 relative overflow-hidden">
+                            <div className="absolute inset-0 opacity-10">
+                              <div className="text-terminal-green text-xs font-mono leading-tight break-all">
+                                {Array(20).fill('01010101 ').join('')}
+                                {Array(20).fill('10101010 ').join('')}
+                                {Array(20).fill('11001100 ').join('')}
+                              </div>
+                            </div>
+                            
+                            <div className="relative z-10 flex flex-col items-center gap-3">
+                              <div className="w-24 h-24 border-4 border-terminal-green/30 rounded-lg flex items-center justify-center">
+                                <span className="text-5xl text-terminal-green font-bold" style={{
+                                  textShadow: '0 0 20px rgba(0, 255, 159, 0.6)',
+                                }}>
+                                  {'</>'}
+                                </span>
+                              </div>
+                              <div className="text-terminal-cyan font-mono text-xs">
+                                RIANNE_LIM.DEV
+                              </div>
+                              <div className="flex gap-2 text-terminal-dim text-xs">
+                                <span>■</span>
+                                <span>■</span>
+                                <span>■</span>
+                              </div>
+                            </div>
+
+                            <div className="absolute top-4 left-4 text-terminal-green/30 text-xs font-mono">
+                              {'>>'}
+                            </div>
+                            <div className="absolute top-4 right-4 text-terminal-green/30 text-xs font-mono">
+                              {'<<'}
+                            </div>
+                            <div className="absolute bottom-4 left-4 text-terminal-green/30 text-xs font-mono">
+                              {'>>'}
+                            </div>
+                            <div className="absolute bottom-4 right-4 text-terminal-green/30 text-xs font-mono">
+                              {'<<'}
+                            </div>
+                          </div>
+                        </Card>
+                      </div>
+                    </CardWrapper>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Progress indicators */}
+            <div className="flex gap-2 mt-6">
+              {projectsData.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setActiveIndex(index)}
+                  className={`w-2 h-2 rounded-full transition-all ${
+                    index === activeIndex 
+                      ? 'bg-terminal-green w-8' 
+                      : 'bg-terminal-green/30 hover:bg-terminal-green/50'
+                  }`}
+                  aria-label={`Go to project ${index + 1}`}
+                />
+              ))}
+            </div>
+
+            {/* Swipe instruction */}
+            <p className="text-center text-terminal-dim text-xs mt-4 animate-pulse">
+              ← Swipe to browse projects →
+            </p>
+          </div>
+
+          <p className="text-center text-terminal-dim text-sm animate-pulse hidden md:block">
+            {flippedCards.every(f => f) ? 'Hover over cards to explore projects' : 'Watch the cards flip...'}
           </p>
         </section>
 
