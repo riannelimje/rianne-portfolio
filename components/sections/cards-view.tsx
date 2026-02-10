@@ -16,6 +16,8 @@ export function CardsView() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState(0);
   const sectionRef = useRef<HTMLDivElement>(null);
   const hasAnimated = useRef(false);
 
@@ -53,13 +55,13 @@ export function CardsView() {
     return () => observer.disconnect();
   }, []);
 
-  // Keyboard navigation for mobile fan
+  // Keyboard navigation for mobile fan (circular)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowLeft' && activeIndex > 0) {
-        setActiveIndex(prev => prev - 1);
-      } else if (e.key === 'ArrowRight' && activeIndex < projectsData.length - 1) {
-        setActiveIndex(prev => prev + 1);
+      if (e.key === 'ArrowLeft') {
+        setActiveIndex(prev => prev === 0 ? projectsData.length - 1 : prev - 1);
+      } else if (e.key === 'ArrowRight') {
+        setActiveIndex(prev => prev === projectsData.length - 1 ? 0 : prev + 1);
       }
     };
 
@@ -70,28 +72,67 @@ export function CardsView() {
   // Swipe handlers for mobile
   const handleTouchStart = (e: React.TouchEvent) => {
     setTouchStart(e.targetTouches[0].clientX);
+    setTouchEnd(0); // Reset
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
     setTouchEnd(e.targetTouches[0].clientX);
   };
 
-  const handleTouchEnd = () => {
-    if (!touchStart || !touchEnd) return;
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (!touchStart) return;
     
-    const distance = touchStart - touchEnd;
+    // Get final position from changedTouches if touchEnd wasn't set
+    const finalPosition = touchEnd || e.changedTouches[0].clientX;
+    const distance = touchStart - finalPosition;
     const isLeftSwipe = distance > 50;
     const isRightSwipe = distance < -50;
 
-    if (isLeftSwipe && activeIndex < projectsData.length - 1) {
-      setActiveIndex(prev => prev + 1);
-    }
-    if (isRightSwipe && activeIndex > 0) {
-      setActiveIndex(prev => prev - 1);
+    if (isLeftSwipe) {
+      // Swipe left: go to next card, wrap to first if at end
+      setActiveIndex(prev => prev === projectsData.length - 1 ? 0 : prev + 1);
+    } else if (isRightSwipe) {
+      // Swipe right: go to previous card, wrap to last if at start
+      setActiveIndex(prev => prev === 0 ? projectsData.length - 1 : prev - 1);
     }
 
     setTouchStart(0);
     setTouchEnd(0);
+  };
+
+  // Mouse handlers for desktop testing
+  const handleMouseDown = (e: React.MouseEvent) => {
+    setIsDragging(true);
+    setDragStart(e.clientX);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging) return;
+  };
+
+  const handleMouseUp = (e: React.MouseEvent) => {
+    if (!isDragging) return;
+    const distance = dragStart - e.clientX;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+
+    if (isLeftSwipe) {
+      setActiveIndex(prev => prev === projectsData.length - 1 ? 0 : prev + 1);
+    } else if (isRightSwipe) {
+      setActiveIndex(prev => prev === 0 ? projectsData.length - 1 : prev - 1);
+    }
+
+    setIsDragging(false);
+  };
+
+  const handleNavigation = (direction: 'left' | 'right') => {
+    setActiveIndex(prev => {
+      if (direction === 'left') {
+        return prev === 0 ? projectsData.length - 1 : prev - 1;
+      } else {
+        return prev === projectsData.length - 1 ? 0 : prev + 1;
+      }
+    });
   };
 
   return (
@@ -315,28 +356,65 @@ export function CardsView() {
             </div>
           </div>
 
-          {/* Mobile: Waterfall cascade */}
+          {/* Mobile: Pressure Fan (swipeable) */}
           <div className="md:hidden relative flex flex-col items-center py-8" style={{ perspective: '1500px' }}>
-            {/* Swipeable card fan */}
+            {/* Swipeable card fan with arrows */}
+            <div className="relative w-full min-h-[420px] px-2">
+              {/* Navigation arrows */}
+              <button
+                onClick={() => handleNavigation('left')}
+                className="absolute left-0 top-1/2 -translate-y-1/2 z-[150] w-10 h-10 bg-background/80 hover:bg-background border border-terminal-green/60 hover:border-terminal-green rounded-full flex items-center justify-center text-terminal-green transition-all hover:scale-110 backdrop-blur-md shadow-lg"
+                style={{ pointerEvents: 'auto' }}
+                aria-label="Previous project"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+              <button
+                onClick={() => handleNavigation('right')}
+                className="absolute right-0 top-1/2 -translate-y-1/2 z-[150] w-10 h-10 bg-background/80 hover:bg-background border border-terminal-green/60 hover:border-terminal-green rounded-full flex items-center justify-center text-terminal-green transition-all hover:scale-110 backdrop-blur-md shadow-lg"
+                style={{ pointerEvents: 'auto' }}
+                aria-label="Next project"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+
             <div 
               className="relative w-full h-[420px] flex items-center justify-center"
               onTouchStart={handleTouchStart}
               onTouchMove={handleTouchMove}
               onTouchEnd={handleTouchEnd}
-              style={{ perspective: '1200px' }}
+              onMouseDown={handleMouseDown}
+              onMouseMove={handleMouseMove}
+              onMouseUp={handleMouseUp}
+              onMouseLeave={() => setIsDragging(false)}
+              style={{ perspective: '1200px', isolation: 'isolate', cursor: isDragging ? 'grabbing' : 'grab' }}
             >
               {projectsData.map((project, index) => {
                 const isFlipped = flippedCards[index];
                 const isActive = index === activeIndex;
-                const offset = index - activeIndex;
+                
+                // Calculate circular offset for wrapping effect
+                let offset = index - activeIndex;
+                const totalCards = projectsData.length;
+                
+                // Wrap offset to nearest path (circular)
+                if (offset > totalCards / 2) {
+                  offset -= totalCards;
+                } else if (offset < -totalCards / 2) {
+                  offset += totalCards;
+                }
                 
                 // Fan out effect: cards spread horizontally and rotate based on position
-                const translateX = offset * 15; // Horizontal spread
-                const translateZ = isActive ? 0 : Math.abs(offset) * -30; // Depth
-                const rotateY = offset * 8; // Fan rotation
-                const scale = isActive ? 1 : 0.85 - Math.abs(offset) * 0.05;
-                const opacity = Math.max(0.3, 1 - Math.abs(offset) * 0.15);
-                const zIndex = projectsData.length - Math.abs(offset);
+                const translateX = offset * 20; // Horizontal spread
+                const translateZ = isActive ? 0 : Math.abs(offset) * -40; // Depth
+                const rotateY = offset * 10; // Fan rotation
+                const scale = isActive ? 1 : Math.max(0.75, 0.95 - Math.abs(offset) * 0.08);
+                const opacity = Math.max(0.4, 1 - Math.abs(offset) * 0.2);
+                const zIndex = 100 - Math.abs(offset);
                 
                 const CardWrapper = project.link ? 'a' : 'div';
                 const linkProps = project.link ? {
@@ -355,7 +433,7 @@ export function CardsView() {
                       zIndex: zIndex,
                       pointerEvents: isActive ? 'auto' : 'none',
                     }}
-                    onClick={() => setActiveIndex(index)}
+                    onClick={() => !isActive && setActiveIndex(index)}
                   >
                     <CardWrapper
                       {...linkProps}
@@ -392,21 +470,21 @@ export function CardsView() {
                             </CardTitle>
                           </CardHeader>
                           <CardContent className="pt-4 space-y-3 h-[280px] flex flex-col">
-                            <p className="text-sm text-muted-foreground leading-relaxed flex-grow overflow-hidden">
+                            <p className="text-sm text-muted-foreground leading-relaxed flex-grow overflow-hidden line-clamp-3">
                               {project.desc}
                             </p>
-                            <div className="flex flex-wrap gap-1.5 mt-auto">
-                              {project.tech.slice(0, 3).map((t) => (
+                            <div className="flex flex-wrap gap-1.5 mt-auto overflow-hidden">
+                              {project.tech.slice(0, 4).map((t) => (
                                 <span
                                   key={t}
-                                  className="text-xs px-2.5 py-1 bg-terminal-green/10 border border-terminal-green/40 rounded text-terminal-cyan"
+                                  className="text-xs px-2 py-1 bg-terminal-green/10 border border-terminal-green/40 rounded text-terminal-cyan whitespace-nowrap"
                                 >
                                   {t}
                                 </span>
                               ))}
-                              {project.tech.length > 3 && (
-                                <span className="text-xs px-2.5 py-1 bg-terminal-green/10 border border-terminal-green/40 rounded text-terminal-dim">
-                                  +{project.tech.length - 3}
+                              {project.tech.length > 4 && (
+                                <span className="text-xs px-2 py-1 bg-terminal-green/10 border border-terminal-green/40 rounded text-terminal-dim whitespace-nowrap">
+                                  +{project.tech.length - 4}
                                 </span>
                               )}
                             </div>
@@ -469,6 +547,7 @@ export function CardsView() {
                 );
               })}
             </div>
+            </div>
 
             {/* Progress indicators */}
             <div className="flex gap-2 mt-6">
@@ -476,7 +555,7 @@ export function CardsView() {
                 <button
                   key={index}
                   onClick={() => setActiveIndex(index)}
-                  className={`w-2 h-2 rounded-full transition-all ${
+                  className={`w-2 h-2 rounded-full transition-all cursor-pointer ${
                     index === activeIndex 
                       ? 'bg-terminal-green w-8' 
                       : 'bg-terminal-green/30 hover:bg-terminal-green/50'
