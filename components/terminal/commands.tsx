@@ -133,11 +133,14 @@ function SkillsOutput() {
 }
 
 function ProjectsOutput() {
+  const [showAll, setShowAll] = React.useState(false);
+  const displayedProjects = showAll ? projectsData : projectsData.slice(0, 3);
+  
   return (
     <div className="space-y-4 py-2">
       <p className="text-terminal-cyan">{"/* Featured Projects */"}</p>
       <div className="grid gap-4">
-        {projectsData.map((project) => {
+        {displayedProjects.map((project) => {
           const ProjectWrapper = project.link ? 'a' : 'div';
           const linkProps = project.link ? {
             href: project.link,
@@ -176,9 +179,12 @@ function ProjectsOutput() {
           );
         })}
       </div>
-      <p className="text-terminal-dim text-sm">
-        View more on GitHub →
-      </p>
+      <button
+        onClick={() => setShowAll(!showAll)}
+        className="text-terminal-dim text-sm hover:text-terminal-green transition-colors cursor-pointer"
+      >
+        {showAll ? "↑ Show less" : `↓ Expand list (${projectsData.length - 3} more)`}
+      </button>
     </div>
   );
 }
